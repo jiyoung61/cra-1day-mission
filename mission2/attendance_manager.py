@@ -32,7 +32,7 @@ class AttendanceManager:
 
     def update_attendance_count(self, name, weekday: Weekdays):
         player = self.get_player(name)
-        player.attendance_week[weekday] += 1
+        player.attend(weekday)
 
     def calculate_basic_point(self, name, weekday):
         player = self.get_player(name)

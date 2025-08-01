@@ -15,3 +15,6 @@ class Player:
     @property
     def attendance_weekends(self):
         return self.attendance_week[Weekdays.SATURDAY] + self.attendance_week[Weekdays.SUNDAY]
+
+    def attend(self, weekday: Weekdays):
+        self.attendance_week[weekday] += 1
