@@ -28,12 +28,10 @@ class AttendanceManager:
         raise ValueError(f"Unknown Player. name={name}")
 
     def update_attendance_count(self, name, weekday: Weekdays):
-        player = self.get_player(name)
-        player.attend(weekday)
+        self.get_player(name).attend(weekday)
 
     def calculate_basic_point(self, name, weekday):
-        player = self.get_player(name)
-        player.points += self.point_policy.get_weekday_point(weekday)
+        self.get_player(name).points += self.point_policy.get_weekday_point(weekday)
 
     def calculate_bonus_point(self):
         for player in self.player_list:
