@@ -1,5 +1,5 @@
 from mission2.attendance import input_file
-
+from mission2.player import Player
 
 def test_attendance_golden(capsys):
     input_file()
@@ -29,3 +29,14 @@ def test_attendance_golden(capsys):
                    '==============\n'
                    'Bob\n'
                    'Zane\n')
+
+def test_check_list_reference_works():
+    player_list = [Player("test")]
+    player = player_list[0]
+    player.points = 100
+
+    assert player_list[0].points == 100
+
+def test_check_player_attendance_week_initial_count():
+    player = Player("test")
+    assert len(player.attendance_week) == 7 # week days

@@ -1,34 +1,30 @@
+from mission2.player import Player
+
 """
 system constraints
 """
 MAX_INPUT_LINE = 500
 
-"""
-global variables
-"""
-# player_list = { "name": id, ... }
-player_list = {}
-id_cnt = 0
-
-# attendance_week[player_id][weekday_index]
-attendance_week = [[0] * 100 for _ in range(100)]
-attendance_wed = [0] * 100
-attendance_weekends = [0] * 100
-points = [0] * 100
-grade = [0] * 100
-player_names = [''] * 100
+player_list: list[Player] = []
 
 
 def add_new_player(name):
-    global id_cnt
-    if name not in player_list:
-        id_cnt += 1
-        player_list[name] = id_cnt
-        player_names[id_cnt] = name
+    if name not in [player.name for player in player_list]:
+        player_list.append(Player(name))
 
 
 def get_player_id(name):
-    return player_list[name]
+    for player_id, player in enumerate(player_list):
+        if player.name == name:
+            return player_id
+    raise ValueError(f"Unknown Player. name={name}")
+
+
+def get_player(name):
+    for player in player_list:
+        if player.name == name:
+            return player
+    raise ValueError(f"Unknown Player. name={name}")
 
 
 def get_weekday_index(weekday: str) -> int:
@@ -51,14 +47,14 @@ def get_weekday_index(weekday: str) -> int:
 
 
 def update_attendance_count(name, weekday):
-    player_id = get_player_id(name)
+    player = get_player(name)
     weekday_index = get_weekday_index(weekday)
-    attendance_week[player_id][weekday_index] += 1
+    player.attendance_week[weekday_index] += 1
 
     if weekday == "wednesday":
-        attendance_wed[player_id] += 1
+        player.attendance_wed += 1
     elif weekday == "saturday" or weekday == "sunday":
-        attendance_weekends[player_id] += 1
+        player.attendance_weekends += 1
 
 
 def get_point(weekday: str) -> int:
@@ -71,34 +67,34 @@ def get_point(weekday: str) -> int:
 
 
 def calculate_basic_point(name, weekday):
-    player_id = get_player_id(name)
-    points[player_id] += get_point(weekday)
+    player = get_player(name)
+    player.points += get_point(weekday)
 
 
 def calculate_bonus_point():
-    for player_id in range(1, id_cnt + 1):
-        if attendance_week[player_id][2] > 9:
-            points[player_id] += 10
-        if attendance_week[player_id][5] + attendance_week[player_id][6] > 9:
-            points[player_id] += 10
+    for player in player_list:
+        if player.attendance_week[2] > 9:
+            player.points += 10
+        if player.attendance_week[5] + player.attendance_week[6] > 9:
+            player.points += 10
 
 
 def update_player_grade():
-    for i in range(1, id_cnt + 1):
-        if points[i] >= 50:
-            grade[i] = 1
-        elif points[i] >= 30:
-            grade[i] = 2
+    for player in player_list:
+        if player.points >= 50:
+            player.grade = 1
+        elif player.points >= 30:
+            player.grade = 2
         else:
-            grade[i] = 0
+            player.grade = 0
 
 
 def print_player_info():
-    for player_id in range(1, id_cnt + 1):
-        print(f"NAME : {player_names[player_id]}, POINT : {points[player_id]}, GRADE : ", end="")
-        if grade[player_id] == 1:
+    for player in player_list:
+        print(f"NAME : {player.name}, POINT : {player.points}, GRADE : ", end="")
+        if player.grade == 1:
             print("GOLD")
-        elif grade[player_id] == 2:
+        elif player.grade == 2:
             print("SILVER")
         else:
             print("NORMAL")
@@ -107,9 +103,9 @@ def print_player_info():
 def print_removed_player():
     print("\nRemoved player")
     print("==============")
-    for player_id in range(1, id_cnt + 1):
-        if grade[player_id] not in (1, 2) and attendance_wed[player_id] == 0 and attendance_weekends[player_id] == 0:
-            print(player_names[player_id])
+    for player in player_list:
+        if player.grade not in (1, 2) and player.attendance_wed == 0 and player.attendance_weekends == 0:
+            print(player.name)
 
 
 def input_file():
