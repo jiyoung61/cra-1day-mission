@@ -7,6 +7,8 @@ from mission2.default_remove_policy import DefaultPlayerRemovePolicy
 from mission2.player import Player
 from mission2.weekdays import Weekdays
 
+INPUT_FILE = "attendance_weekday_500.txt"
+
 
 @pytest.fixture
 def app():
@@ -18,7 +20,7 @@ def app():
 
 
 def test_attendance_golden(app, capsys):
-    app.process()
+    app.process(INPUT_FILE)
     out, err = capsys.readouterr()
 
     assert out == ('NAME : Umar, POINT : 48, GRADE : SILVER\n'

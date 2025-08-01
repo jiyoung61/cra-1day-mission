@@ -58,9 +58,9 @@ class AttendanceManager:
             if self.remove_policy.valid_candidate(player):
                 print(player.name)
 
-    def input_file(self):
+    def input_file(self, file_name):
         try:
-            with open("attendance_weekday_500.txt", encoding='utf-8') as f:
+            with open(file_name, encoding='utf-8') as f:
                 for _ in range(MAX_INPUT_LINE):
                     line = f.readline()
                     if not line:
@@ -74,8 +74,8 @@ class AttendanceManager:
         except FileNotFoundError:
             print("파일을 찾을 수 없습니다.")
 
-    def process(self):
-        self.input_file()
+    def process(self, file_name):
+        self.input_file(file_name)
 
         self.calculate_bonus_point()
         self.update_player_grade()

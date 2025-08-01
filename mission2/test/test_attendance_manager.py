@@ -77,3 +77,14 @@ def test_update_player_grade(manager):
     manager.update_player_grade()
 
     assert manager.get_player(TEST_PLAYER).grade == 0
+
+
+def test_invalid_input_file(manager, capsys):
+    manager.input_file("wrong_file.txt")
+    out, err = capsys.readouterr()
+
+    assert out == "파일을 찾을 수 없습니다.\n"
+
+def test_empty_input_file(manager):
+    manager.input_file("empty_input.txt")
+    assert True
