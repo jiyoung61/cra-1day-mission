@@ -1,4 +1,4 @@
-from mission1.attendance import input_file
+from mission2.attendance import input_file
 
 
 def test_attendance_golden(capsys):
