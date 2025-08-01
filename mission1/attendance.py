@@ -10,90 +10,68 @@ attendance_wed = [0] * 100
 attendance_weekends = [0] * 100
 
 
-def get_player_id(player_name):
-    return player_ids[player_name]
+def add_new_player(name):
+    global id_cnt
+    if name not in player_ids:
+        id_cnt += 1
+        player_ids[name] = id_cnt
+        player_names[id_cnt] = name
 
 
-def calculate_basic_point(player_name, attended_weekday):
-    player_id = get_player_id(player_name)
-    points[player_id] += get_point(attended_weekday)
+def get_player_id(name):
+    return player_ids[name]
 
 
-def update_attendance_count(player_name, attended_weekday):
-    player_id = get_player_id(player_name)
-    weekday_index = get_weekday_index(attended_weekday)
+def get_weekday_index(weekday: str) -> int:
+    if weekday == "monday":
+        return 0
+    elif weekday == "tuesday":
+        return 1
+    elif weekday == "wednesday":
+        return 2
+    elif weekday == "thursday":
+        return 3
+    elif weekday == "friday":
+        return 4
+    elif weekday == "saturday":
+        return 5
+    elif weekday == "sunday":
+        return 6
+
+    raise ValueError(f"attended_weekday={weekday}")
+
+
+def update_attendance_count(name, weekday):
+    player_id = get_player_id(name)
+    weekday_index = get_weekday_index(weekday)
     attendance_count[player_id][weekday_index] += 1
 
-    if attended_weekday == "wednesday":
+    if weekday == "wednesday":
         attendance_wed[player_id] += 1
-    elif attended_weekday == "saturday" or attended_weekday == "sunday":
+    elif weekday == "saturday" or weekday == "sunday":
         attendance_weekends[player_id] += 1
 
 
-def get_point(attended_weekday: str) -> int:
-    if attended_weekday == "wednesday":
+def get_point(weekday: str) -> int:
+    if weekday == "wednesday":
         return 3
-    elif attended_weekday == "saturday" or attended_weekday == "sunday":
+    elif weekday == "saturday" or weekday == "sunday":
         return 2
     else:
         return 1
 
 
-def get_weekday_index(attended_weekday: str) -> int:
-    if attended_weekday == "monday":
-        return 0
-    elif attended_weekday == "tuesday":
-        return 1
-    elif attended_weekday == "wednesday":
-        return 2
-    elif attended_weekday == "thursday":
-        return 3
-    elif attended_weekday == "friday":
-        return 4
-    elif attended_weekday == "saturday":
-        return 5
-    elif attended_weekday == "sunday":
-        return 6
-
-    raise ValueError(f"attended_weekday={attended_weekday}")
+def calculate_basic_point(name, weekday):
+    player_id = get_player_id(name)
+    points[player_id] += get_point(weekday)
 
 
-def add_new_player(player_name):
-    global id_cnt
-    if player_name not in player_ids:
-        id_cnt += 1
-        player_ids[player_name] = id_cnt
-        player_names[id_cnt] = player_name
-
-
-def input_file():
-    try:
-        with open("attendance_weekday_500.txt", encoding='utf-8') as f:
-            for _ in range(500):
-                line = f.readline()
-                if not line:
-                    break
-                parts = line.strip().split()
-                if len(parts) == 2:
-                    player_name, attended_weekday = parts[0], parts[1]
-                    add_new_player(player_name)
-                    update_attendance_count(player_name, attended_weekday)
-                    calculate_basic_point(player_name, attended_weekday)
-
-        calculate_bonus_point()
-        update_player_grade()
-
-        print_player_info()
-        print_removed_player()
-
-    except FileNotFoundError:
-        print("파일을 찾을 수 없습니다.")
-
-
-def print_player_info():
+def calculate_bonus_point():
     for i in range(1, id_cnt + 1):
-        print(f"NAME : {player_names[i]}, POINT : {points[i]}, GRADE : ", end="")
-        print_grade(i)
+        if attendance_count[i][2] > 9:
+            points[i] += 10
+        if attendance_count[i][5] + attendance_count[i][6] > 9:
+            points[i] += 10
 
 
 def update_player_grade():
@@ -106,12 +84,15 @@ def update_player_grade():
             grade[i] = 0
 
 
-def calculate_bonus_point():
-    for i in range(1, id_cnt + 1):
-        if attendance_count[i][2] > 9:
-            points[i] += 10
-        if attendance_count[i][5] + attendance_count[i][6] > 9:
-            points[i] += 10
+def print_player_info():
+    for player_id in range(1, id_cnt + 1):
+        print(f"NAME : {player_names[player_id]}, POINT : {points[player_id]}, GRADE : ", end="")
+        if grade[player_id] == 1:
+            print("GOLD")
+        elif grade[player_id] == 2:
+            print("SILVER")
+        else:
+            print("NORMAL")
 
 
 def print_removed_player():
@@ -122,13 +103,28 @@ def print_removed_player():
             print(player_names[i])
 
 
-def print_grade(player_id):
-    if grade[player_id] == 1:
-        print("GOLD")
-    elif grade[player_id] == 2:
-        print("SILVER")
-    else:
-        print("NORMAL")
+def input_file():
+    try:
+        with open("attendance_weekday_500.txt", encoding='utf-8') as f:
+            for _ in range(500):
+                line = f.readline()
+                if not line:
+                    break
+                parts = line.strip().split()
+                if len(parts) == 2:
+                    name, weekday = parts[0], parts[1]
+                    add_new_player(name)
+                    update_attendance_count(name, weekday)
+                    calculate_basic_point(name, weekday)
+
+        calculate_bonus_point()
+        update_player_grade()
+
+        print_player_info()
+        print_removed_player()
+
+    except FileNotFoundError:
+        print("파일을 찾을 수 없습니다.")
 
 
 if __name__ == "__main__":
