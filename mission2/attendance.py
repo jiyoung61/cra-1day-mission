@@ -27,35 +27,15 @@ def get_player(name):
     raise ValueError(f"Unknown Player. name={name}")
 
 
-def get_weekday_index(weekday: str) -> int:
-    if weekday == "monday":
-        return Weekdays.MONDAY
-    elif weekday == "tuesday":
-        return Weekdays.TUESDAY
-    elif weekday == "wednesday":
-        return Weekdays.WEDNESDAY
-    elif weekday == "thursday":
-        return Weekdays.THURSDAY
-    elif weekday == "friday":
-        return Weekdays.FRIDAY
-    elif weekday == "saturday":
-        return Weekdays.SATURDAY
-    elif weekday == "sunday":
-        return Weekdays.SUNDAY
-
-    raise ValueError(f"attended_weekday={weekday}")
-
-
-def update_attendance_count(name, weekday):
+def update_attendance_count(name, weekday: Weekdays):
     player = get_player(name)
-    weekday_index = get_weekday_index(weekday)
-    player.attendance_week[weekday_index] += 1
+    player.attendance_week[weekday] += 1
 
 
-def get_point(weekday: str) -> int:
-    if weekday == "wednesday":
+def get_point(weekday: Weekdays) -> int:
+    if weekday == Weekdays.WEDNESDAY:
         return 3
-    elif weekday == "saturday" or weekday == "sunday":
+    elif weekday == Weekdays.SATURDAY or weekday == Weekdays.SUNDAY:
         return 2
     else:
         return 1
@@ -112,7 +92,7 @@ def input_file():
                     break
                 parts = line.strip().split()
                 if len(parts) == 2:
-                    name, weekday = parts[0], parts[1]
+                    name, weekday = parts[0], Weekdays[parts[1].upper()]
                     add_player(name)
                     update_attendance_count(name, weekday)
                     calculate_basic_point(name, weekday)
