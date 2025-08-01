@@ -94,7 +94,7 @@ def update_player_grade():
 
 def calculate_bonus_point():
     for i in range(1, id_cnt + 1):
-        if attendance_count[i][3] > 9:
+        if attendance_count[i][2] > 9:
             points[i] += 10
         if attendance_count[i][5] + attendance_count[i][6] > 9:
             points[i] += 10
