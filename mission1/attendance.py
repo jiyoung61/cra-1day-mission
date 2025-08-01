@@ -10,13 +10,13 @@ global variables
 player_list = {}
 id_cnt = 0
 
-# attendance_count[player_id][weekday_index]
-attendance_count = [[0] * 100 for _ in range(100)]
+# attendance_week[player_id][weekday_index]
+attendance_week = [[0] * 100 for _ in range(100)]
+attendance_wed = [0] * 100
+attendance_weekends = [0] * 100
 points = [0] * 100
 grade = [0] * 100
 player_names = [''] * 100
-attendance_wed = [0] * 100
-attendance_weekends = [0] * 100
 
 
 def add_new_player(name):
@@ -53,7 +53,7 @@ def get_weekday_index(weekday: str) -> int:
 def update_attendance_count(name, weekday):
     player_id = get_player_id(name)
     weekday_index = get_weekday_index(weekday)
-    attendance_count[player_id][weekday_index] += 1
+    attendance_week[player_id][weekday_index] += 1
 
     if weekday == "wednesday":
         attendance_wed[player_id] += 1
@@ -76,11 +76,11 @@ def calculate_basic_point(name, weekday):
 
 
 def calculate_bonus_point():
-    for i in range(1, id_cnt + 1):
-        if attendance_count[i][2] > 9:
-            points[i] += 10
-        if attendance_count[i][5] + attendance_count[i][6] > 9:
-            points[i] += 10
+    for player_id in range(1, id_cnt + 1):
+        if attendance_week[player_id][2] > 9:
+            points[player_id] += 10
+        if attendance_week[player_id][5] + attendance_week[player_id][6] > 9:
+            points[player_id] += 10
 
 
 def update_player_grade():
@@ -107,9 +107,9 @@ def print_player_info():
 def print_removed_player():
     print("\nRemoved player")
     print("==============")
-    for i in range(1, id_cnt + 1):
-        if grade[i] not in (1, 2) and attendance_wed[i] == 0 and attendance_weekends[i] == 0:
-            print(player_names[i])
+    for player_id in range(1, id_cnt + 1):
+        if grade[player_id] not in (1, 2) and attendance_wed[player_id] == 0 and attendance_weekends[player_id] == 0:
+            print(player_names[player_id])
 
 
 def input_file():
