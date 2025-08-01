@@ -11,9 +11,6 @@ attendance_weekends = [0] * 100
 
 
 def calculate_basic_point(player_name, attended_weekday):
-    if player_name not in player_ids:
-        add_new_player(player_name)
-
     player_id = player_ids[player_name]
 
     add_point = 0
@@ -50,9 +47,10 @@ def calculate_basic_point(player_name, attended_weekday):
 
 def add_new_player(player_name):
     global id_cnt
-    id_cnt += 1
-    player_ids[player_name] = id_cnt
-    player_names[id_cnt] = player_name
+    if player_name not in player_ids:
+        id_cnt += 1
+        player_ids[player_name] = id_cnt
+        player_names[id_cnt] = player_name
 
 
 def input_file():
@@ -64,6 +62,7 @@ def input_file():
                     break
                 parts = line.strip().split()
                 if len(parts) == 2:
+                    add_new_player(parts[0])
                     calculate_basic_point(parts[0], parts[1])
 
         calculate_bonus_point()
