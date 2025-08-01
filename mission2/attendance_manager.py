@@ -1,5 +1,5 @@
+from mission2.abstract_grade_policy import AbstractPlayerGradePolicy
 from mission2.abstract_remove_policy import AbstractPlayerRemovePolicy
-from mission2.default_remove_policy import DefaultPlayerRemovePolicy
 from mission2.player import Player
 from mission2.weekdays import Weekdays
 
@@ -17,8 +17,10 @@ BONUS_POINT_WEDNESDAY = 10
 
 class AttendanceManager:
     def __init__(self,
+                 grade_policy: AbstractPlayerGradePolicy,
                  remove_policy: AbstractPlayerRemovePolicy):
         self.player_list: list[Player] = []
+        self.grade_policy = grade_policy
         self.remove_policy = remove_policy
 
 
@@ -57,12 +59,7 @@ class AttendanceManager:
 
     def update_player_grade(self):
         for player in self.player_list:
-            if player.points >= 50:
-                player.grade = 1
-            elif player.points >= 30:
-                player.grade = 2
-            else:
-                player.grade = 0
+            player.grade = self.grade_policy.get_grade(player.points)
 
     def print_player_info(self):
         for player in self.player_list:
