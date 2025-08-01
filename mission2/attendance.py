@@ -7,6 +7,12 @@ MAX_INPUT_LINE = 500
 
 player_list: list[Player] = []
 
+"""
+points parameter
+"""
+BONUS_POINT_WEEKENDS = 10
+BONUS_POINT_WEDNESDAY = 10
+
 
 def add_player(name):
     if name not in [player.name for player in player_list]:
@@ -67,9 +73,9 @@ def calculate_basic_point(name, weekday):
 def calculate_bonus_point():
     for player in player_list:
         if player.attendance_week[2] > 9:
-            player.points += 10
+            player.points += BONUS_POINT_WEDNESDAY
         if player.attendance_week[5] + player.attendance_week[6] > 9:
-            player.points += 10
+            player.points += BONUS_POINT_WEEKENDS
 
 
 def update_player_grade():
