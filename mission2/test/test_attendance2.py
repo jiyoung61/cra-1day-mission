@@ -1,10 +1,15 @@
-from mission2.attendance import input_file
+import pytest
+
+from mission2.attendance_manager import AttendanceManager
 from mission2.player import Player
 from mission2.weekdays import Weekdays
 
+@pytest.fixture
+def app():
+    return AttendanceManager()
 
-def test_attendance_golden(capsys):
-    input_file()
+def test_attendance_golden(app, capsys):
+    app.process()
     out, err = capsys.readouterr()
 
     assert out == ('NAME : Umar, POINT : 48, GRADE : SILVER\n'
