@@ -1,7 +1,8 @@
-player_ids = {}
+# player_list = { "name": id }
+player_list = {}
 id_cnt = 0
 
-# dat[사용자ID][요일]
+# attendance_count[player_id][weekday_index]
 attendance_count = [[0] * 100 for _ in range(100)]
 points = [0] * 100
 grade = [0] * 100
@@ -12,14 +13,14 @@ attendance_weekends = [0] * 100
 
 def add_new_player(name):
     global id_cnt
-    if name not in player_ids:
+    if name not in player_list:
         id_cnt += 1
-        player_ids[name] = id_cnt
+        player_list[name] = id_cnt
         player_names[id_cnt] = name
 
 
 def get_player_id(name):
-    return player_ids[name]
+    return player_list[name]
 
 
 def get_weekday_index(weekday: str) -> int:
