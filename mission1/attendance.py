@@ -1,4 +1,12 @@
-# player_list = { "name": id }
+"""
+system constraints
+"""
+MAX_INPUT_LINE = 500
+
+"""
+global variables
+"""
+# player_list = { "name": id, ... }
 player_list = {}
 id_cnt = 0
 
@@ -107,7 +115,7 @@ def print_removed_player():
 def input_file():
     try:
         with open("attendance_weekday_500.txt", encoding='utf-8') as f:
-            for _ in range(500):
+            for _ in range(MAX_INPUT_LINE):
                 line = f.readline()
                 if not line:
                     break
@@ -117,6 +125,9 @@ def input_file():
                     add_new_player(name)
                     update_attendance_count(name, weekday)
                     calculate_basic_point(name, weekday)
+                else:
+                    print(f"parse error.line={line}")
+                    continue
 
         calculate_bonus_point()
         update_player_grade()
