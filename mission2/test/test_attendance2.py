@@ -2,16 +2,20 @@ import pytest
 
 from mission2.attendance_manager import AttendanceManager
 from mission2.default_grade_policy import DefaultPlayerGradePolicy
+from mission2.default_point_policy import DefaultPlayerPointPolicy
 from mission2.default_remove_policy import DefaultPlayerRemovePolicy
 from mission2.player import Player
 from mission2.weekdays import Weekdays
 
+
 @pytest.fixture
 def app():
     return AttendanceManager(
+        point_policy=DefaultPlayerPointPolicy(),
         grade_policy=DefaultPlayerGradePolicy(),
         remove_policy=DefaultPlayerRemovePolicy()
     )
+
 
 def test_attendance_golden(app, capsys):
     app.process()

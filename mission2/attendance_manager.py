@@ -1,4 +1,5 @@
 from mission2.abstract_grade_policy import AbstractPlayerGradePolicy
+from mission2.abstract_point_policy import AbstractPlayerPointPolicy
 from mission2.abstract_remove_policy import AbstractPlayerRemovePolicy
 from mission2.player import Player
 from mission2.weekdays import Weekdays
@@ -8,21 +9,16 @@ system constraints
 """
 MAX_INPUT_LINE = 500
 
-"""
-points parameter
-"""
-BONUS_POINT_WEEKENDS = 10
-BONUS_POINT_WEDNESDAY = 10
-
 
 class AttendanceManager:
     def __init__(self,
+                 point_policy: AbstractPlayerPointPolicy,
                  grade_policy: AbstractPlayerGradePolicy,
                  remove_policy: AbstractPlayerRemovePolicy):
         self.player_list: list[Player] = []
+        self.point_policy = point_policy
         self.grade_policy = grade_policy
         self.remove_policy = remove_policy
-
 
     def add_player(self, name):
         if name not in [player.name for player in self.player_list]:
@@ -38,24 +34,13 @@ class AttendanceManager:
         player = self.get_player(name)
         player.attendance_week[weekday] += 1
 
-    def get_point(self, weekday: Weekdays) -> int:
-        if weekday == Weekdays.WEDNESDAY:
-            return 3
-        elif weekday == Weekdays.SATURDAY or weekday == Weekdays.SUNDAY:
-            return 2
-        else:
-            return 1
-
     def calculate_basic_point(self, name, weekday):
         player = self.get_player(name)
-        player.points += self.get_point(weekday)
+        player.points += self.point_policy.get_weekday_point(weekday)
 
     def calculate_bonus_point(self):
         for player in self.player_list:
-            if player.attendance_week[Weekdays.WEDNESDAY] > 9:
-                player.points += BONUS_POINT_WEDNESDAY
-            if player.attendance_week[Weekdays.SATURDAY] + player.attendance_week[Weekdays.SUNDAY] > 9:
-                player.points += BONUS_POINT_WEEKENDS
+            player.points += self.point_policy.get_bonus_point(player)
 
     def update_player_grade(self):
         for player in self.player_list:
