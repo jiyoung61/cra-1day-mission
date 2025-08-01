@@ -1,8 +1,5 @@
 from mission2.player import Player
-
-SUNDAY = 6
-SATURDAY = 5
-WEDNESDAY = 2
+from mission2.weekdays import Weekdays
 
 """
 system constraints
@@ -32,19 +29,19 @@ def get_player(name):
 
 def get_weekday_index(weekday: str) -> int:
     if weekday == "monday":
-        return 0
+        return Weekdays.MONDAY
     elif weekday == "tuesday":
-        return 1
+        return Weekdays.TUESDAY
     elif weekday == "wednesday":
-        return 2
+        return Weekdays.WEDNESDAY
     elif weekday == "thursday":
-        return 3
+        return Weekdays.THURSDAY
     elif weekday == "friday":
-        return 4
+        return Weekdays.FRIDAY
     elif weekday == "saturday":
-        return 5
+        return Weekdays.SATURDAY
     elif weekday == "sunday":
-        return 6
+        return Weekdays.SUNDAY
 
     raise ValueError(f"attended_weekday={weekday}")
 
@@ -71,9 +68,9 @@ def calculate_basic_point(name, weekday):
 
 def calculate_bonus_point():
     for player in player_list:
-        if player.attendance_week[WEDNESDAY] > 9:
+        if player.attendance_week[Weekdays.WEDNESDAY] > 9:
             player.points += BONUS_POINT_WEDNESDAY
-        if player.attendance_week[SATURDAY] + player.attendance_week[SUNDAY] > 9:
+        if player.attendance_week[Weekdays.SATURDAY] + player.attendance_week[Weekdays.SUNDAY] > 9:
             player.points += BONUS_POINT_WEEKENDS
 
 

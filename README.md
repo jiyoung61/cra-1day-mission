@@ -1,4 +1,6 @@
 # CRA 양성 교육 python 6차수 공통과제
+## System Requirements
+* python 3.11
 
 ## 1.요구사항 체크리스트
 |항목| 체크 |
