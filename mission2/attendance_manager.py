@@ -71,9 +71,6 @@ class AttendanceManager:
                         self.add_player(name)
                         self.update_attendance_count(name, weekday)
                         self.calculate_basic_point(name, weekday)
-                    else:
-                        print(f"parse error.line={line}")
-                        continue
         except FileNotFoundError:
             print("파일을 찾을 수 없습니다.")
 
