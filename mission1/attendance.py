@@ -13,37 +13,37 @@ attendance_weekends = [0] * 100
 def calculate_basic_point(player_name, attended_weekday):
     player_id = player_ids[player_name]
 
-    add_point = 0
+    add_point = get_point(attended_weekday)
     weekday_index = 0
 
     if attended_weekday == "monday":
         weekday_index = 0
-        add_point += 1
     elif attended_weekday == "tuesday":
         weekday_index = 1
-        add_point += 1
     elif attended_weekday == "wednesday":
         weekday_index = 2
-        add_point += 3
         attendance_wed[player_id] += 1
     elif attended_weekday == "thursday":
         weekday_index = 3
-        add_point += 1
     elif attended_weekday == "friday":
         weekday_index = 4
-        add_point += 1
     elif attended_weekday == "saturday":
         weekday_index = 5
-        add_point += 2
         attendance_weekends[player_id] += 1
     elif attended_weekday == "sunday":
         weekday_index = 6
-        add_point += 2
         attendance_weekends[player_id] += 1
 
     attendance_count[player_id][weekday_index] += 1
     points[player_id] += add_point
 
+def get_point(attended_weekday: str) -> int:
+    if attended_weekday == "wednesday":
+        return 3
+    elif attended_weekday == "saturday" or attended_weekday == "sunday":
+        return 2
+    else:
+        return 1
 
 def add_new_player(player_name):
     global id_cnt
