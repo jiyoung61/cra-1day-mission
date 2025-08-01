@@ -9,33 +9,28 @@ player_names = [''] * 100
 attendance_wed = [0] * 100
 attendance_weekends = [0] * 100
 
+def get_player_id(player_name):
+    player_id = player_ids[player_name]
+    return player_id
 
 def calculate_basic_point(player_name, attended_weekday):
-    player_id = player_ids[player_name]
+    player_id = get_player_id(player_name)
+    update_attendance_count(player_name, attended_weekday)
 
     add_point = get_point(attended_weekday)
-    weekday_index = 0
-
-    if attended_weekday == "monday":
-        weekday_index = 0
-    elif attended_weekday == "tuesday":
-        weekday_index = 1
-    elif attended_weekday == "wednesday":
-        weekday_index = 2
-        attendance_wed[player_id] += 1
-    elif attended_weekday == "thursday":
-        weekday_index = 3
-    elif attended_weekday == "friday":
-        weekday_index = 4
-    elif attended_weekday == "saturday":
-        weekday_index = 5
-        attendance_weekends[player_id] += 1
-    elif attended_weekday == "sunday":
-        weekday_index = 6
-        attendance_weekends[player_id] += 1
-
-    attendance_count[player_id][weekday_index] += 1
     points[player_id] += add_point
+
+
+def update_attendance_count(player_name, attended_weekday):
+    player_id = get_player_id(player_name)
+    weekday_index = get_weekday_index(attended_weekday)
+    attendance_count[player_id][weekday_index] += 1
+
+    if attended_weekday == "wednesday":
+        attendance_wed[player_id] += 1
+    elif attended_weekday == "saturday" or attended_weekday == "sunday":
+        attendance_weekends[player_id] += 1
+
 
 def get_point(attended_weekday: str) -> int:
     if attended_weekday == "wednesday":
@@ -44,6 +39,26 @@ def get_point(attended_weekday: str) -> int:
         return 2
     else:
         return 1
+
+
+def get_weekday_index(attended_weekday: str) -> int:
+    if attended_weekday == "monday":
+        return 0
+    elif attended_weekday == "tuesday":
+        return 1
+    elif attended_weekday == "wednesday":
+        return 2
+    elif attended_weekday == "thursday":
+        return 3
+    elif attended_weekday == "friday":
+        return 4
+    elif attended_weekday == "saturday":
+        return 5
+    elif attended_weekday == "sunday":
+        return 6
+
+    raise ValueError(f"attended_weekday={attended_weekday}")
+
 
 def add_new_player(player_name):
     global id_cnt
