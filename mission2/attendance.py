@@ -8,16 +8,9 @@ MAX_INPUT_LINE = 500
 player_list: list[Player] = []
 
 
-def add_new_player(name):
+def add_player(name):
     if name not in [player.name for player in player_list]:
         player_list.append(Player(name))
-
-
-def get_player_id(name):
-    for player_id, player in enumerate(player_list):
-        if player.name == name:
-            return player_id
-    raise ValueError(f"Unknown Player. name={name}")
 
 
 def get_player(name):
@@ -118,7 +111,7 @@ def input_file():
                 parts = line.strip().split()
                 if len(parts) == 2:
                     name, weekday = parts[0], parts[1]
-                    add_new_player(name)
+                    add_player(name)
                     update_attendance_count(name, weekday)
                     calculate_basic_point(name, weekday)
                 else:
