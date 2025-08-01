@@ -9,16 +9,14 @@ player_names = [''] * 100
 attendance_wed = [0] * 100
 attendance_weekends = [0] * 100
 
+
 def get_player_id(player_name):
-    player_id = player_ids[player_name]
-    return player_id
+    return player_ids[player_name]
+
 
 def calculate_basic_point(player_name, attended_weekday):
     player_id = get_player_id(player_name)
-    update_attendance_count(player_name, attended_weekday)
-
-    add_point = get_point(attended_weekday)
-    points[player_id] += add_point
+    points[player_id] += get_point(attended_weekday)
 
 
 def update_attendance_count(player_name, attended_weekday):
@@ -77,8 +75,10 @@ def input_file():
                     break
                 parts = line.strip().split()
                 if len(parts) == 2:
-                    add_new_player(parts[0])
-                    calculate_basic_point(parts[0], parts[1])
+                    player_name, attended_weekday = parts[0], parts[1]
+                    add_new_player(player_name)
+                    update_attendance_count(player_name, attended_weekday)
+                    calculate_basic_point(player_name, attended_weekday)
 
         calculate_bonus_point()
         update_player_grade()
