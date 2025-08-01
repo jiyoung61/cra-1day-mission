@@ -4,9 +4,6 @@ from mission2.abstract_remove_policy import AbstractPlayerRemovePolicy
 from mission2.player import Player
 from mission2.weekdays import Weekdays
 
-"""
-system constraints
-"""
 MAX_INPUT_LINE = 500
 
 
