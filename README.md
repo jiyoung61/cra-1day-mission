@@ -12,4 +12,4 @@
 |D5| O  |
 
 ## 2. Code Coverage 최종 측정결과 캡쳐
-TBU
+<img width="683" height="828" alt="image" src="https://github.com/user-attachments/assets/ca757db8-4636-4946-87ff-eba3573125ab" />
