@@ -10,9 +10,7 @@ attendance_wed = [0] * 100
 attendance_weekends = [0] * 100
 
 
-def input2(player_name, attended_weekday):
-    global id_cnt
-
+def calculate_basic_point(player_name, attended_weekday):
     if player_name not in player_ids:
         add_new_player(player_name)
 
@@ -66,28 +64,40 @@ def input_file():
                     break
                 parts = line.strip().split()
                 if len(parts) == 2:
-                    input2(parts[0], parts[1])
+                    calculate_basic_point(parts[0], parts[1])
 
-        for i in range(1, id_cnt + 1):
-            if attendance_count[i][3] > 9:
-                points[i] += 10
-            if attendance_count[i][5] + attendance_count[i][6] > 9:
-                points[i] += 10
+        calculate_bonus_point()
+        update_player_grade()
 
-            if points[i] >= 50:
-                grade[i] = 1
-            elif points[i] >= 30:
-                grade[i] = 2
-            else:
-                grade[i] = 0
-
-            print(f"NAME : {player_names[i]}, POINT : {points[i]}, GRADE : ", end="")
-            print_grade(i)
-
+        print_player_info()
         print_removed_player()
 
     except FileNotFoundError:
         print("파일을 찾을 수 없습니다.")
+
+
+def print_player_info():
+    for i in range(1, id_cnt + 1):
+        print(f"NAME : {player_names[i]}, POINT : {points[i]}, GRADE : ", end="")
+        print_grade(i)
+
+
+def update_player_grade():
+    for i in range(1, id_cnt + 1):
+        if points[i] >= 50:
+            grade[i] = 1
+        elif points[i] >= 30:
+            grade[i] = 2
+        else:
+            grade[i] = 0
+
+
+def calculate_bonus_point():
+    for i in range(1, id_cnt + 1):
+        if attendance_count[i][3] > 9:
+            points[i] += 10
+        if attendance_count[i][5] + attendance_count[i][6] > 9:
+            points[i] += 10
 
 
 def print_removed_player():
