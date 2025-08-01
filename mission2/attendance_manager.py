@@ -1,3 +1,4 @@
+from mission2.abstract_remove_policy import AbstractPlayerRemovePolicy
 from mission2.default_remove_policy import DefaultPlayerRemovePolicy
 from mission2.player import Player
 from mission2.weekdays import Weekdays
@@ -15,8 +16,11 @@ BONUS_POINT_WEDNESDAY = 10
 
 
 class AttendanceManager:
-    def __init__(self):
+    def __init__(self,
+                 remove_policy: AbstractPlayerRemovePolicy):
         self.player_list: list[Player] = []
+        self.remove_policy = remove_policy
+
 
     def add_player(self, name):
         if name not in [player.name for player in self.player_list]:
@@ -73,9 +77,8 @@ class AttendanceManager:
     def print_removed_player(self):
         print("\nRemoved player")
         print("==============")
-        remove_policy = DefaultPlayerRemovePolicy()
         for player in self.player_list:
-            if remove_policy.valid_candidate(player):
+            if self.remove_policy.valid_candidate(player):
                 print(player.name)
 
     def input_file(self):
