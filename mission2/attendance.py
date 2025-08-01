@@ -1,3 +1,5 @@
+from mission2.abstract_remove_policy import AbstractPlayerRemovePolicy
+from mission2.default_remove_policy import DefaultPlayerRemovePolicy
 from mission2.player import Player
 from mission2.weekdays import Weekdays
 
@@ -78,8 +80,9 @@ def print_player_info():
 def print_removed_player():
     print("\nRemoved player")
     print("==============")
+    remove_policy = DefaultPlayerRemovePolicy()
     for player in player_list:
-        if player.grade not in (1, 2) and player.attendance_wed == 0 and player.attendance_weekends == 0:
+        if remove_policy.valid_candidate(player):
             print(player.name)
 
 
